@@ -72,11 +72,11 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         switch (view.getId())
         {
             case R.id.re:
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, ND.class);
                 startActivity(intent);
                 break;
             case R.id.finish:
-                Intent intent1 = new Intent(this, MainActivity.class);
+                Intent intent1 = new Intent(this, ND.class);
                 startActivity(intent1);
                 break;
         }
@@ -88,11 +88,11 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         {
             case R.id.list_view_goods_1:
                 if(position==0)
-                {Intent intent = new Intent(this, MainActivity.class);
+                {Intent intent = new Intent(this, ND.class);
                 startActivity(intent);}
                 break;
             case R.id.finish:
-                Intent intent1 = new Intent(this, MainActivity.class);
+                Intent intent1 = new Intent(this, ND.class);
                 startActivity(intent1);
                 break;
         }
