@@ -20,9 +20,13 @@
             android:id="@+id/nav_tools"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/menu_tools" />
+        <item
+            android:id="@+id/nav_gaoji"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="高级版" />
     </group>
 
-    <item android:title="">
+    <item android:title="其他功能">
         <menu>
             <item
                 android:id="@+id/nav_share"
@@ -32,6 +36,10 @@
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
                 android:title="@string/menu_send" />
+            <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/ic_menu_send"
+                android:title="帮助与反馈" />
         </menu>
     </item>
 

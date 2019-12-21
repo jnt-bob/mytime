@@ -9,14 +9,6 @@
 
     <include layout="@layout/content_nd" />
 
-    <ImageView
-        android:id="@+id/add"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="20dp"
-        android:src="@drawable/add"></ImageView>
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="50dp"

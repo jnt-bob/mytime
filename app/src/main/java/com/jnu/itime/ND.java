@@ -23,7 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.widget.ImageView;
 
-public class ND extends AppCompatActivity implements View.OnClickListener{
+public class ND extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -33,8 +33,7 @@ public class ND extends AppCompatActivity implements View.OnClickListener{
         setContentView(R.layout.activity_nd);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ImageView add = (ImageView) findViewById(R.id.add);
-        add.setOnClickListener(this);
+
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -65,14 +64,5 @@ public class ND extends AppCompatActivity implements View.OnClickListener{
                 || super.onSupportNavigateUp();
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId())
-        {
-            case R.id.add:
-                Intent intent = new Intent(this, AddActivity.class);
-                startActivity(intent);
-                break;
-        }
-    }
+
 }
