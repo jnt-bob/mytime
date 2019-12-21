@@ -5,9 +5,10 @@
     android:layout_height="match_parent">
 
     <ListView
-        android:id="@+id/list_view_goods_2"
+        android:id="@+id/list_view_goods_1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="120dp"/>
     <ImageView
         android:id="@+id/add"
         android:layout_width="50dp"
