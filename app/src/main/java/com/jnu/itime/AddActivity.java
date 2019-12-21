@@ -5,7 +5,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,6 +42,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private ImageView finish;
     private String date;
     private String time;
+    private AlertDialog alertDialog1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,18 +109,41 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                             now.get(Calendar.MONTH), // Initial month selection
                             now.get(Calendar.DAY_OF_MONTH) // Inital day selection
                     );
-
-
-                    Calendar now1 = Calendar.getInstance();
-                    TimePickerDialog dpd1 = TimePickerDialog.newInstance(
-                            AddActivity.this,
-                            now1.get(Calendar.HOUR_OF_DAY), // Initial year selection
-                            now1.get(Calendar.MINUTE), // Initial month selection
-                            true// Inital day selection
-                    );
-                    dpd1.show(getSupportFragmentManager(), "Datepickerdialog");
                     dpd.show(getSupportFragmentManager(), "Datepickerdialog");
+                } else if (position==1)
+                {
+                    final String[] items = {"每周", "每月", "每年", "自定义"};
+                    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+                    alertBuilder.setTitle("周期");
+                    alertBuilder.setItems(items, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //Toast.makeText(AddActivity.this, items[i], Toast.LENGTH_SHORT).show();
+                            set_kind_1 times=theset1.get(1);
+                            if(i!=3)
+                            {times.setTwo(items[i]);
+                            theAdaper.notifyDataSetChanged();}
+                            else
+                            {
+                                final EditText inputServer = new EditText(AddActivity.this);
+                                AlertDialog.Builder builder=new AlertDialog.Builder(AddActivity.this);
+                                builder.setTitle("周期").setView(inputServer)
+                                        .setNegativeButton("取消", null);
+                                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        inputServer.getText().toString();
+                                        times.setTwo(inputServer.getText().toString()+"天");
+                                        theAdaper.notifyDataSetChanged();
+                                    }
+                                });
+                                builder.show();
+                            }
+                            alertDialog1.dismiss();
+                        }
+                    });
+                    alertDialog1 = alertBuilder.create();
+                    alertDialog1.show();
                 }
                 break;
             case R.id.finish:
@@ -129,6 +156,14 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         date =year+"年"+(monthOfYear+1)+"月"+dayOfMonth;
+        Calendar now1 = Calendar.getInstance();
+        TimePickerDialog dpd1 = TimePickerDialog.newInstance(
+                AddActivity.this,
+                now1.get(Calendar.HOUR_OF_DAY), // Initial year selection
+                now1.get(Calendar.MINUTE), // Initial month selection
+                true// Inital day selection
+        );
+        dpd1.show(getSupportFragmentManager(), "Datepickerdialog");
     }
 
     @Override
