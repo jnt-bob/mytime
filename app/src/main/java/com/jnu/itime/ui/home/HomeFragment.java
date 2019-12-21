@@ -51,8 +51,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private void InitData() {
         theset1=new  ArrayList<set_kind_zhu>();
-        theset1.add(new set_kind_zhu("日期", "时间","空间", R.drawable.day));
-        theset1.add(new set_kind_zhu("重复设置", "无","空间", R.drawable.set));
+        theset1.add(new set_kind_zhu("只剩"+"\n"+"3天", "学习","2019年12月13日", R.drawable.day));
+        theset1.add(new set_kind_zhu("只剩"+"\n"+"3天", "复习","2019年12月13日", R.drawable.set));
     }
 
     @Override
