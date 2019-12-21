@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -115,6 +116,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     );
                     dpd1.show(getSupportFragmentManager(), "Datepickerdialog");
                     dpd.show(getSupportFragmentManager(), "Datepickerdialog");
+
                 }
                 break;
             case R.id.finish:
@@ -126,12 +128,18 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        date = "You picked the following date: "+dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
+        date =year+"年"+(monthOfYear+1)+"月"+dayOfMonth;
     }
 
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-       time = "You picked the following time: "+hourOfDay+"h"+minute+"m"+second;
+        if(minute>9)
+       time = hourOfDay+":"+minute;
+        else
+            time = hourOfDay+":0"+minute;
+        set_kind_1 times=theset1.get(0);
+        times.setTwo(date+" "+time);
+        theAdaper.notifyDataSetChanged();
     }
 
 
