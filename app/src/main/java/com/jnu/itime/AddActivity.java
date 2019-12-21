@@ -44,6 +44,12 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private String time;
     private AlertDialog alertDialog1;
 
+    private View alertDialogView;
+    private String userName;
+    private String userPassword;
+    private EditText userNameEdit;
+    private EditText userPasswordEdit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,9 +152,24 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     alertDialog1.show();
                 }
                 break;
-            case R.id.finish:
-                Intent intent1 = new Intent(this, ND.class);
-                startActivity(intent1);
+            case R.id.list_view_goods_2:
+                if(position==1)
+                {
+                    AlertDialog.Builder loginAlertDialog = new AlertDialog.Builder (AddActivity.this);
+                    alertDialogView = getLayoutInflater ().inflate (R.layout.myalter, null, false);
+                    loginAlertDialog.setView (alertDialogView);
+                    loginAlertDialog.setPositiveButton ("OK", new DialogInterface.OnClickListener () {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            userNameEdit = alertDialogView.findViewById (R.id.city_text);
+                            userPasswordEdit = alertDialogView.findViewById (R.id.nian_text);
+                            userName = userNameEdit.getText ().toString ();
+                            userPassword = userPasswordEdit.getText ().toString ();
+                        }
+                    });
+
+                    loginAlertDialog.show ();
+                }
                 break;
         }
     }

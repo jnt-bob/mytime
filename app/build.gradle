@@ -25,6 +25,7 @@ android {
 
 dependencies {
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
+    compile 'me.gujun.android.taggroup:library:1.4@aar'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
