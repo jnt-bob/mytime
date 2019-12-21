@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static androidx.core.os.LocaleListCompat.create;
+
 public class AddActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, DatePickerDialog.OnDateSetListener , TimePickerDialog.OnTimeSetListener {
 
     private ArrayList<set_kind_1> theset1;
@@ -45,10 +47,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private AlertDialog alertDialog1;
 
     private View alertDialogView;
-    private String userName;
-    private String userPassword;
-    private EditText userNameEdit;
-    private EditText userPasswordEdit;
+
+private int i=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +97,18 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             case R.id.finish:
                 Intent intent1 = new Intent(this, ND.class);
                 startActivity(intent1);
+                break;
+            case R.id.textView1:
+                if(i==0) {
+                    view.setEnabled(false);
+                    i=1;
+                }
+                else {
+                    view.setEnabled(true);
+                    view.setTag(true);
+                    i=0;
+                }
+                //Toast.makeText(AddActivity.this, "233", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -155,22 +167,20 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             case R.id.list_view_goods_2:
                 if(position==1)
                 {
-                    AlertDialog.Builder loginAlertDialog = new AlertDialog.Builder (AddActivity.this);
                     alertDialogView = getLayoutInflater ().inflate (R.layout.myalter, null, false);
+                    AlertDialog.Builder loginAlertDialog = new AlertDialog.Builder (AddActivity.this);
                     loginAlertDialog.setView (alertDialogView);
                     loginAlertDialog.setPositiveButton ("OK", new DialogInterface.OnClickListener () {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            userNameEdit = alertDialogView.findViewById (R.id.city_text);
-                            userPasswordEdit = alertDialogView.findViewById (R.id.nian_text);
-                            userName = userNameEdit.getText ().toString ();
-                            userPassword = userPasswordEdit.getText ().toString ();
+
                         }
                     });
 
                     loginAlertDialog.show ();
                 }
                 break;
+
         }
     }
 
