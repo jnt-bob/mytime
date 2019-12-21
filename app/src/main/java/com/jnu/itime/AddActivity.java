@@ -15,14 +15,20 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
+
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
-public class AddActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class AddActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, DatePickerDialog.OnDateSetListener , TimePickerDialog.OnTimeSetListener {
 
     private ArrayList<set_kind_1> theset1;
     private GoodsArrayAdapter theAdaper;
@@ -30,6 +36,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private GoodsArrayAdapter2 theAdaper2;
     private ImageView re;
     private ImageView finish;
+    private String date;
+    private String time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +68,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     private void InitData() {
         theset1=new  ArrayList<set_kind_1>();
-        theset1.add(new set_kind_1("日期", "时间", R.drawable.day));
+        theset1.add(new set_kind_1("日期", "无", R.drawable.day));
         theset1.add(new set_kind_1("重复设置", "无", R.drawable.set));
         theset2=new  ArrayList<set_kind_2>();
         theset2.add(new set_kind_2("图片",R.drawable.picture));
@@ -88,8 +96,26 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         {
             case R.id.list_view_goods_1:
                 if(position==0)
-                {Intent intent = new Intent(this, ND.class);
-                startActivity(intent);}
+                {
+                    Calendar now = Calendar.getInstance();
+                    DatePickerDialog dpd = DatePickerDialog.newInstance(
+                            AddActivity.this,
+                            now.get(Calendar.YEAR), // Initial year selection
+                            now.get(Calendar.MONTH), // Initial month selection
+                            now.get(Calendar.DAY_OF_MONTH) // Inital day selection
+                    );
+
+
+                    Calendar now1 = Calendar.getInstance();
+                    TimePickerDialog dpd1 = TimePickerDialog.newInstance(
+                            AddActivity.this,
+                            now1.get(Calendar.HOUR_OF_DAY), // Initial year selection
+                            now1.get(Calendar.MINUTE), // Initial month selection
+                            true// Inital day selection
+                    );
+                    dpd1.show(getSupportFragmentManager(), "Datepickerdialog");
+                    dpd.show(getSupportFragmentManager(), "Datepickerdialog");
+                }
                 break;
             case R.id.finish:
                 Intent intent1 = new Intent(this, ND.class);
@@ -97,6 +123,17 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 break;
         }
     }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        date = "You picked the following date: "+dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
+    }
+
+    @Override
+    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+       time = "You picked the following time: "+hourOfDay+"h"+minute+"m"+second;
+    }
+
 
     class GoodsArrayAdapter extends ArrayAdapter<set_kind_1> {
         private int resourceId;
