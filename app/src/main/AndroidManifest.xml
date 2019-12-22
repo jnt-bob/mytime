@@ -21,5 +21,7 @@
         </activity>
         <activity android:name=".AddActivity"></activity>
     </application>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 </manifest>

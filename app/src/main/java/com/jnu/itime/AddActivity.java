@@ -100,11 +100,11 @@ private int i=0;
                 break;
             case R.id.textView1:
                 if(i==0) {
-                    view.setEnabled(false);
+                    view.setBackgroundResource(R.drawable.mark_beselected);
                     i=1;
                 }
                 else {
-                    view.setEnabled(true);
+                    view.setBackgroundResource(R.drawable.mark_notbeselected);
                     view.setTag(true);
                     i=0;
                 }
