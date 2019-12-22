@@ -9,6 +9,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +25,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -28,13 +33,14 @@ import android.widget.Toast;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import static androidx.core.os.LocaleListCompat.create;
 
-public class AddActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, DatePickerDialog.OnDateSetListener , TimePickerDialog.OnTimeSetListener {
+public class AddActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private ArrayList<set_kind_1> theset1;
     private GoodsArrayAdapter theAdaper;
@@ -47,16 +53,27 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private AlertDialog alertDialog1;
 
     private View alertDialogView;
+    private RelativeLayout relativeLayout;
+    private EditText edit_title;
+    private EditText edit_bei;
+    private Bitmap mBitmap;
+    private final String[] items = {"每周", "每月", "每年", "自定义"};
+    private int time_fu=0;
 
-private int i=0;
+    private int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_add);
-        re=(ImageView) this.findViewById(R.id.re);
-        finish=(ImageView) this.findViewById(R.id.finish);
+
+        relativeLayout = this.findViewById(R.id.relativelayout);
+        edit_bei = this.findViewById(R.id.bei);
+        edit_title = this.findViewById(R.id.title);
+
+        re = (ImageView) this.findViewById(R.id.re);
+        finish = (ImageView) this.findViewById(R.id.finish);
 
         re.setOnClickListener(this);
         finish.setOnClickListener(this);
@@ -78,35 +95,40 @@ private int i=0;
     }
 
     private void InitData() {
-        theset1=new  ArrayList<set_kind_1>();
+        theset1 = new ArrayList<set_kind_1>();
         theset1.add(new set_kind_1("日期", "无", R.drawable.day));
         theset1.add(new set_kind_1("重复设置", "无", R.drawable.set));
-        theset2=new  ArrayList<set_kind_2>();
-        theset2.add(new set_kind_2("图片",R.drawable.picture));
+        theset2 = new ArrayList<set_kind_2>();
+        theset2.add(new set_kind_2("图片", R.drawable.picture));
         theset2.add(new set_kind_2("添加标签", R.drawable.qian));
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId())
-        {
+        switch (view.getId()) {
             case R.id.re:
-                Intent intent = new Intent(this, ND.class);
-                startActivity(intent);
-                break;
-            case R.id.finish:
                 Intent intent1 = new Intent(this, ND.class);
                 startActivity(intent1);
                 break;
+            case R.id.finish:
+                Intent intent = new Intent(this, ND.class);
+                intent.putExtra("title", edit_title.getText().toString().trim());
+                intent.putExtra("bei", edit_bei.getText().toString().trim());
+                intent.putExtra("day", date+"日");
+                intent.putExtra("time",time);
+                intent.putExtra("fu", time_fu);
+                intent.putExtra("picture", mBitmap);
+                setResult(RESULT_OK, intent);
+                AddActivity.this.finish();
+                break;
             case R.id.textView1:
-                if(i==0) {
+                if (i == 0) {
                     view.setBackgroundResource(R.drawable.mark_beselected);
-                    i=1;
-                }
-                else {
+                    i = 1;
+                } else {
                     view.setBackgroundResource(R.drawable.mark_notbeselected);
                     view.setTag(true);
-                    i=0;
+                    i = 0;
                 }
                 //Toast.makeText(AddActivity.this, "233", Toast.LENGTH_SHORT).show();
                 break;
@@ -115,11 +137,9 @@ private int i=0;
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        switch (adapterView.getId())
-        {
+        switch (adapterView.getId()) {
             case R.id.list_view_goods_1:
-                if(position==0)
-                {
+                if (position == 0) {
                     Calendar now = Calendar.getInstance();
                     DatePickerDialog dpd = DatePickerDialog.newInstance(
                             AddActivity.this,
@@ -128,30 +148,29 @@ private int i=0;
                             now.get(Calendar.DAY_OF_MONTH) // Inital day selection
                     );
                     dpd.show(getSupportFragmentManager(), "Datepickerdialog");
-                } else if (position==1)
-                {
-                    final String[] items = {"每周", "每月", "每年", "自定义"};
+                } else if (position == 1) {
+
                     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
                     alertBuilder.setTitle("周期");
                     alertBuilder.setItems(items, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             //Toast.makeText(AddActivity.this, items[i], Toast.LENGTH_SHORT).show();
-                            set_kind_1 times=theset1.get(1);
-                            if(i!=3)
-                            {times.setTwo(items[i]);
-                            theAdaper.notifyDataSetChanged();}
-                            else
-                            {
+                            time_fu=i;
+                            set_kind_1 times = theset1.get(1);
+                            if (i != 3) {
+                                times.setTwo(items[i]);
+                                theAdaper.notifyDataSetChanged();
+                            } else {
                                 final EditText inputServer = new EditText(AddActivity.this);
-                                AlertDialog.Builder builder=new AlertDialog.Builder(AddActivity.this);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(AddActivity.this);
                                 builder.setTitle("周期").setView(inputServer)
                                         .setNegativeButton("取消", null);
                                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
                                     public void onClick(DialogInterface dialog, int which) {
                                         inputServer.getText().toString();
-                                        times.setTwo(inputServer.getText().toString()+"天");
+                                        times.setTwo(inputServer.getText().toString() + "天");
                                         theAdaper.notifyDataSetChanged();
                                     }
                                 });
@@ -165,19 +184,23 @@ private int i=0;
                 }
                 break;
             case R.id.list_view_goods_2:
-                if(position==1)
-                {
-                    alertDialogView = getLayoutInflater ().inflate (R.layout.myalter, null, false);
-                    AlertDialog.Builder loginAlertDialog = new AlertDialog.Builder (AddActivity.this);
-                    loginAlertDialog.setView (alertDialogView);
-                    loginAlertDialog.setPositiveButton ("OK", new DialogInterface.OnClickListener () {
+                if (position == 1) {
+                    alertDialogView = getLayoutInflater().inflate(R.layout.myalter, null, false);
+                    AlertDialog.Builder loginAlertDialog = new AlertDialog.Builder(AddActivity.this);
+                    loginAlertDialog.setView(alertDialogView);
+                    loginAlertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
                         }
                     });
 
-                    loginAlertDialog.show ();
+                    loginAlertDialog.show();
+                } else if (position == 0) {
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    //设置请求码，以便我们区分返回的数据
+                    startActivityForResult(intent, 100);
                 }
                 break;
 
@@ -185,8 +208,31 @@ private int i=0;
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (100 == requestCode) {
+            if (data != null) {
+                //获取数据
+                //获取内容解析者对象
+                try {
+                    mBitmap = BitmapFactory.decodeStream(
+                            getContentResolver().openInputStream(data.getData()));
+                    //imageview.setImageBitmap(mBitmap);
+                    Drawable drawable = new BitmapDrawable(getResources(), mBitmap);
+                    if (mBitmap != null)
+                        relativeLayout.setBackground(drawable);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
+
+    @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        date =year+"年"+(monthOfYear+1)+"月"+dayOfMonth;
+        date = year + "年" + (monthOfYear + 1) + "月" + dayOfMonth;
         Calendar now1 = Calendar.getInstance();
         TimePickerDialog dpd1 = TimePickerDialog.newInstance(
                 AddActivity.this,
@@ -199,12 +245,12 @@ private int i=0;
 
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        if(minute>9)
-       time = hourOfDay+":"+minute;
+        if (minute > 9)
+            time = hourOfDay + ":" + minute;
         else
-            time = hourOfDay+":0"+minute;
-        set_kind_1 times=theset1.get(0);
-        times.setTwo(date+" "+time);
+            time = hourOfDay + ":0" + minute;
+        set_kind_1 times = theset1.get(0);
+        times.setTwo(date + " " + time);
         theAdaper.notifyDataSetChanged();
     }
 

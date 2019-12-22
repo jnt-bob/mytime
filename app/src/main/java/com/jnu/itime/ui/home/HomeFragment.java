@@ -2,6 +2,7 @@ package com.jnu.itime.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
@@ -26,6 +28,8 @@ import com.jnu.itime.set_kind_zhu;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
@@ -61,8 +65,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         {
             case R.id.add:
                 Intent intent = new Intent(getContext(), AddActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 111);
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK)
+        {
+            String title=data.getStringExtra("title");
+            String day=data.getStringExtra("day");
+            double price =data.getDoubleExtra("good_price",0);
+            Bitmap bitmap = (Bitmap) data.getParcelableExtra("picture");
+            theset1.add(new set_kind_zhu("只剩"+"\n"+"3天", title,day, R.drawable.day));
+            //Toast.makeText(getContext(), "233", Toast.LENGTH_SHORT).show();
+            theAdaper.notifyDataSetChanged();
         }
     }
 
