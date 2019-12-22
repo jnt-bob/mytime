@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -129,6 +130,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         startActivityForResult(intent, 222);
     }
 
+    public static Bitmap imageScale(Bitmap bitmap, int dst_w, int dst_h) {
+        int src_w = bitmap.getWidth();
+        int src_h = bitmap.getHeight();
+        float scale_w = ((float) dst_w) / src_w;
+        float scale_h = ((float) dst_h) / src_h;
+        Matrix matrix = new Matrix();
+        matrix.postScale(scale_w, scale_h);
+        Bitmap dstbmp = Bitmap.createBitmap(bitmap, 0, 0, src_w, src_h, matrix,
+                                            true);
+        return dstbmp;
+    }
+
     class GoodsArrayAdapter extends ArrayAdapter<set_kind_zhu> {
         private int resourceId;
 
@@ -147,12 +160,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
             TextView string1 = (TextView) item.findViewById(R.id.text_view_string1);
             TextView string2 = (TextView) item.findViewById(R.id.text_view_string2);
             TextView string3 = (TextView) item.findViewById(R.id.text_view_string3);
+            TextView string4 = (TextView) item.findViewById(R.id.text_view_string4);
 
             set_kind_zhu item1 = this.getItem(position);
-            img.setImageBitmap(item1.getPictureId());
+            img.setImageBitmap(imageScale(item1.getPictureId(),20,20));
             string1.setText(item1.getDay_cha());
             string2.setText(item1.getTitle());
             string3.setText(item1.getDay());
+            string4.setText(item1.getBei());
 
             return item;
         }
