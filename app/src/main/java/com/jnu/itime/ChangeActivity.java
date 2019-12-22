@@ -14,6 +14,8 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ChangeActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -52,6 +56,11 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
     private long hours=0;
     private long min=0;
     private long secord=0;
+
+
+    private int i = 0;
+    private Timer timer = null;
+    private TimerTask task = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,6 +135,8 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
         theAdaper2 = new GoodsArrayAdapter2(this, R.layout.switch_button, theset2);
         ListView listViewSuper2 = (ListView) findViewById(R.id.list_view_goods_2);
         listViewSuper2.setAdapter(theAdaper2);
+
+        startTime();
     }
 
     @Override
@@ -202,6 +213,51 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
         }
         return re;
     }
+
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            //time.setText(msg.arg1 + "");
+            dao.setText(dayss+"天 "+hours+"小时 "+min+"分钟 "+secord+"秒");
+            startTime();
+        };
+    };
+
+    public void startTime() {
+        timer = new Timer();
+        task = new TimerTask() {
+
+            @Override
+            public void run() {
+                if (dayss>0||hours>0||min>0||secord>0) {   //加入判断不能小于0
+                    secord--;
+                    if(secord==-1)
+                    {
+                        min--;
+                        secord=59;
+                        if(min==-1)
+                        {
+                            hours--;
+                            min=59;
+                            if(hours==-1)
+                            {
+                                dayss--;
+                                hours=23;
+                            }
+                        }
+                    }
+                    Message message = mHandler.obtainMessage();
+                    mHandler.sendMessage(message);
+                }
+            }
+        };
+        timer.schedule(task, 1000);
+    }
+
+    public void stopTime(){
+        timer.cancel();
+    }
+
+
 
     class GoodsArrayAdapter2 extends ArrayAdapter<switch_button> {
         private int resourceId;
