@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChangeActivity">
+    tools:context=".ChangeActivity"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/relativelayout"
         android:layout_width="match_parent"
-        android:layout_height="500dp">
+        android:background="@drawable/background"
+        android:layout_height="410dp">
 
         <ImageView
             android:id="@+id/re"
@@ -18,7 +20,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="10dp"
-            android:src="@drawable/re">
+            android:src="@drawable/re2">
         </ImageView>
 
         <ImageView
@@ -53,9 +55,51 @@
             android:src="@drawable/delect">
         </ImageView>
 
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textSize="18dp"
+            android:layout_marginBottom="20dp"
+            android:text="title"
+            android:textColor="@color/White"
+            ></TextView>
+
+        <TextView
+            android:id="@+id/day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/title"
+            android:text="日期"
+            android:layout_marginBottom="20dp"
+            android:textSize="18dp"
+            android:textColor="@color/White"
+            ></TextView>
+
+        <TextView
+            android:id="@+id/dao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/day"
+            android:text="倒计时"
+            android:textSize="18dp"
+            android:textColor="@color/White"
+            ></TextView>
+
 
     </RelativeLayout>
 
+<ListView
+    android:id="@+id/list_view_goods_2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+</ListView>
 
 
-</RelativeLayout>
+
+</LinearLayout>

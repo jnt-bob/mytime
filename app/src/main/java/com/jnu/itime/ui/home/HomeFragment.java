@@ -30,6 +30,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener{
@@ -99,6 +100,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
             theAdaper.notifyDataSetChanged();
             fileDataSource.save();
         }
+        else if(resultCode==RESULT_CANCELED&&requestCode==222)
+        {
+            int position=data.getIntExtra("position",0);
+            theset1.remove(position);
+            theAdaper.notifyDataSetChanged();
+            fileDataSource.save();
+        }
     }
 
     private byte[] bitmap2Bytes(Bitmap bitmap) {
@@ -116,6 +124,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         intent.putExtra("time",theset1.get(position).getTime());
         intent.putExtra("fu",theset1.get(position).getFu());
         intent.putExtra("PictureId",theset1.get(position).getPictureId());
+        intent.putExtra("position",position);
         startActivityForResult(intent, 222);
     }
 

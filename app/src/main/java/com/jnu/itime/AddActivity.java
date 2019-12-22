@@ -142,7 +142,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 intent.putExtra("fu", time_fu);
                 Bitmap bitmap;
                 if (mBitmap != null)
-                    bitmap = imageScale(mBitmap, 20, 20);
+                    bitmap = imageScale(mBitmap, 2, 2);
                 else
                     bitmap = mBitmap;
                 intent.putExtra("picture", bitmap);
