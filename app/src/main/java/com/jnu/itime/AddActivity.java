@@ -31,9 +31,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.jnu.itime.ui.home.HomeFragment;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,6 +66,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private int time_fu = 0;
 
     private int i = 0;
+    private int position=-1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         re.setOnClickListener(this);
         finish.setOnClickListener(this);
 
+
         InitData();
         theAdaper = new GoodsArrayAdapter(this, R.layout.list_item_set_1, theset1);
         ListView listViewSuper = (ListView) findViewById(R.id.list_view_goods_1);
@@ -92,6 +97,25 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         listViewSuper2.setAdapter(theAdaper2);
         listViewSuper2.setOnItemClickListener(this);
         //this.registerForContextMenu(listViewSuper2);
+
+        position=getIntent().getIntExtra("position",-1);
+        if(position!=-1)
+        {
+            edit_title.setText(HomeFragment.theset1.get(position).getTitle());
+            edit_bei.setText(HomeFragment.theset1.get(position).getBei());
+            mBitmap=HomeFragment.theset1.get(position).getPictureId();
+            Drawable drawable = new BitmapDrawable(getResources(),mBitmap);
+            relativeLayout.setBackground(drawable);
+            date=HomeFragment.theset1.get(position).getDay();
+            time=HomeFragment.theset1.get(position).getTime();
+            set_kind_1 times = theset1.get(0);
+            times.setTwo(date + " " + time);
+            set_kind_1 timess = theset1.get(1);
+            time_fu=HomeFragment.theset1.get(position).getFu();
+            if(time_fu!=0)
+            timess.setTwo(items[time_fu]);
+            theAdaper.notifyDataSetChanged();
+        }
 
 
     }
@@ -110,44 +134,58 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         switch (view.getId()) {
             case R.id.re:
                 Intent intent1 = new Intent(this, ND.class);
-                startActivity(intent1);
+                AddActivity.this.finish();
                 break;
             case R.id.finish:
                 if(edit_title.getText().toString().isEmpty())
                     Toast.makeText(AddActivity.this, "标题不能为空", Toast.LENGTH_SHORT).show();
                 else
                 {
-                Intent intent = new Intent(this, ND.class);
-                intent.putExtra("title", edit_title.getText().toString().trim());
-                intent.putExtra("bei", edit_bei.getText().toString().trim());
-                if(date.isEmpty())
-                {
-                    Calendar  calendars = Calendar.getInstance();
-                    calendars.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
-                    String year = String.valueOf(calendars.get(Calendar.YEAR));
+                    if(position==-1) {
+                        Intent intent = new Intent(this, ND.class);
+                        if (date.isEmpty()) {
+                            Calendar calendars = Calendar.getInstance();
+                            calendars.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
+                            String year = String.valueOf(calendars.get(Calendar.YEAR));
 
-                    String month = String.valueOf(calendars.get(Calendar.MONTH));
+                            String month = String.valueOf(calendars.get(Calendar.MONTH));
 
-                    String day = String.valueOf(calendars.get(Calendar.DATE));
+                            String day = String.valueOf(calendars.get(Calendar.DATE));
 
-                    String hour = String.valueOf(calendars.get(Calendar.HOUR));
+                            String hour = String.valueOf(calendars.get(Calendar.HOUR));
 
-                    String min = String.valueOf(calendars.get(Calendar.MINUTE));
+                            String min = String.valueOf(calendars.get(Calendar.MINUTE));
 
-                    date=year+"年"+month+"月"+day;
-                    time=hour+":"+min;
-                }
-                intent.putExtra("day", date + "日");
-                intent.putExtra("time", time);
-                intent.putExtra("fu", time_fu);
-                Bitmap bitmap;
-                if (mBitmap != null)
-                    bitmap = imageScale(mBitmap, 2, 2);
-                else
-                    bitmap = mBitmap;
-                intent.putExtra("picture", bitmap);
-                setResult(RESULT_OK, intent);
-                AddActivity.this.finish();
+                            date = year + "年" + month + "月" + day+"日";
+                            time = hour + ":" + min;
+                        }
+                        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.day, null);
+                        if (mBitmap == null)
+                            mBitmap = bitmap1;
+                        byte[] w = bitmap2Bytes(mBitmap);
+                        HomeFragment.theset1.add(new set_kind_zhu(edit_title.getText().toString().trim(), date, time, w, edit_bei.getText().toString().trim(), time_fu));
+                        setResult(RESULT_OK, intent);
+                        AddActivity.this.finish();
+                    }
+                    else
+                    {
+                        //Toast.makeText(AddActivity.this, "233", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(this, ChangeActivity.class);
+                        byte[] w = bitmap2Bytes(mBitmap);
+                        //HomeFragment.theset1.add(new set_kind_zhu(edit_title.getText().toString().trim(), date + "日", time, w, edit_bei.getText().toString().trim(), time_fu));
+                        set_kind_zhu gai=HomeFragment.theset1.get(position);
+                        gai.setTitle(edit_title.getText().toString().trim());
+                        gai.setBei(edit_bei.getText().toString().trim());
+                        gai.setDay(date);
+                        gai.setTime(time);
+                        gai.setFu(time_fu);
+                        gai.setPictureId(w);
+                        gai.setDay_cha();
+                        intent.putExtra("position",position);
+                        setResult(RESULT_OK, intent);
+                        startActivity(intent);
+                        AddActivity.this.finish();
+                    }
             }
             break;
             case R.id.textView1:
@@ -164,16 +202,12 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    public static Bitmap imageScale(Bitmap bitmap, int dst_w, int dst_h) {
-        int src_w = bitmap.getWidth();
-        int src_h = bitmap.getHeight();
-        float scale_w = ((float) dst_w) / src_w;
-        float scale_h = ((float) dst_h) / src_h;
-        Matrix matrix = new Matrix();
-        matrix.postScale(scale_w, scale_h);
-        Bitmap dstbmp = Bitmap.createBitmap(bitmap, 0, 0, src_w, src_h, matrix, true);
-        return dstbmp;
+    private byte[] bitmap2Bytes(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        return baos.toByteArray();
     }
+
 
 
     @Override
@@ -197,7 +231,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             //Toast.makeText(AddActivity.this, items[i], Toast.LENGTH_SHORT).show();
-                            time_fu = i;
+                            time_fu = i+1;
                             set_kind_1 times = theset1.get(1);
                             if (i != 3) {
                                 times.setTwo(items[i]);
@@ -271,9 +305,11 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+
+
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        date = year + "年" + (monthOfYear + 1) + "月" + dayOfMonth;
+        date = year + "年" + (monthOfYear + 1) + "月" + dayOfMonth+"日";
         Calendar now1 = Calendar.getInstance();
         TimePickerDialog dpd1 = TimePickerDialog.newInstance(
                 AddActivity.this,

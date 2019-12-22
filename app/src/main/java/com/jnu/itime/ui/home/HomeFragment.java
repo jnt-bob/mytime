@@ -31,12 +31,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_FIRST_USER;
 import static android.app.Activity.RESULT_OK;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener{
 
     private HomeViewModel homeViewModel;
-    private ArrayList<set_kind_zhu> theset1;
+    static public ArrayList<set_kind_zhu> theset1;
     private GoodsArrayAdapter theAdaper;
     private FileDataSource fileDataSource;
 
@@ -85,25 +86,31 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK&&requestCode==111)
         {
-            String title=data.getStringExtra("title");
+            /*String title=data.getStringExtra("title");
             String day=data.getStringExtra("day");
             String time=data.getStringExtra("time");
             String bei=data.getStringExtra("bei");
             int fu=data.getIntExtra("fu",0);
-            Bitmap bitmap = (Bitmap) data.getParcelableExtra("picture");
-            Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.day, null);
+            //Bitmap bitmap = (Bitmap) data.getParcelableExtra("picture");
+            byte[] w=data.getByteArrayExtra("picture");
+            /*Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.day, null);
             if(bitmap==null)
                 bitmap=bitmap1;
-            byte[] i=bitmap2Bytes(bitmap);
-            theset1.add(new set_kind_zhu(title,day, time,i,bei,fu));
+            byte[] i=bitmap2Bytes(bitmap);*/
+            //theset1.add(new set_kind_zhu(title,day, time,w,bei,fu));
             //Toast.makeText(getContext(), "233", Toast.LENGTH_SHORT).show();
+            theAdaper.notifyDataSetChanged();
+            fileDataSource.save();
+        }
+        else if(resultCode==RESULT_FIRST_USER&&requestCode==222)
+        {
+            int position=data.getIntExtra("position",0);
+            theset1.remove(position);
             theAdaper.notifyDataSetChanged();
             fileDataSource.save();
         }
         else if(resultCode==RESULT_CANCELED&&requestCode==222)
         {
-            int position=data.getIntExtra("position",0);
-            theset1.remove(position);
             theAdaper.notifyDataSetChanged();
             fileDataSource.save();
         }
@@ -118,12 +125,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
         Intent intent = new Intent(getContext(), ChangeActivity.class);
-        intent.putExtra("title",theset1.get(position).getTitle());
-        intent.putExtra("bei",theset1.get(position).getBei());
-        intent.putExtra("day",theset1.get(position).getDay());
-        intent.putExtra("time",theset1.get(position).getTime());
-        intent.putExtra("fu",theset1.get(position).getFu());
-        intent.putExtra("PictureId",theset1.get(position).getPictureId());
         intent.putExtra("position",position);
         startActivityForResult(intent, 222);
     }

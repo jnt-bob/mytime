@@ -25,6 +25,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jnu.itime.ui.home.HomeFragment;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,6 +47,11 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
     private TextView dao;
     private RelativeLayout relativeLayout;
     private int position;
+
+    private long dayss=0;
+    private long hours=0;
+    private long min=0;
+    private long secord=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,18 +63,18 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
         dao=findViewById(R.id.dao);
         relativeLayout=findViewById(R.id.relativelayout);
 
-        String title= getIntent().getStringExtra("title");
-        String bei= getIntent().getStringExtra("bei");
-        String day= getIntent().getStringExtra("day");
-        String time= getIntent().getStringExtra("time");
-        int fu= getIntent().getIntExtra("fu",0);
-        Bitmap bitmap = (Bitmap) getIntent().getParcelableExtra("PictureId");
         position=getIntent().getIntExtra("position",0);
+        String title= HomeFragment.theset1.get(position).getTitle();
+        String bei= getIntent().getStringExtra("bei");
+        String day= HomeFragment.theset1.get(position).getDay();
+        String time= HomeFragment.theset1.get(position).getTime();
+        int fu= HomeFragment.theset1.get(position).getFu();
+        //Bitmap bitmap = (Bitmap) getIntent().getParcelableExtra("PictureId");
 
         titles.setText(title);
         days.setText(day+" "+time);
-        Bitmap bitmap1=imageScale(bitmap,5,5);
-        Drawable drawable = new BitmapDrawable(getResources(), bitmap1);
+        Bitmap bitmap= HomeFragment.theset1.get(position).getPictureId();
+        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
         relativeLayout.setBackground(drawable);
 
         ArrayList<Integer> day_z=zhuan(day);
@@ -79,10 +86,6 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
 
         SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         Date toDate1 = null;
-        long dayss=0;
-        long hours=0;
-        long min=0;
-        long secord=0;
         try {
             //toDate1 = simpleFormat.parse("2018-03-12 12:00");
             toDate1 = simpleFormat.parse(day_z.get(0)+"-"+day_z.get(1)+"-"+day_z.get(2)+" "+time_z.get(0)+":"+time_z.get(1));
@@ -125,24 +128,13 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
         listViewSuper2.setAdapter(theAdaper2);
     }
 
-    public static Bitmap imageScale(Bitmap bitmap, int dst_w, int dst_h) {
-        int src_w = bitmap.getWidth();
-        int src_h = bitmap.getHeight();
-        float scale_w = ((float) dst_w) * src_w;
-        float scale_h = ((float) dst_h) * src_h;
-        Matrix matrix = new Matrix();
-        matrix.postScale(scale_w, scale_h);
-        Bitmap dstbmp = Bitmap.createBitmap(bitmap, 0, 0, src_w, src_h, matrix, true);
-        return dstbmp;
-    }
-
     @Override
     public void onClick(View view) {
         switch (view.getId())
         {
             case R.id.re:
                 Intent intent1 = new Intent(this, ND.class);
-                startActivity(intent1);
+                ChangeActivity.this.finish();
                 break;
             case R.id.delect:
                 //Toast.makeText(ChangeActivity.this, "点击了确定！", Toast.LENGTH_LONG).show();
@@ -158,7 +150,7 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
                                                        //Toast.makeText(ChangeActivity.this, "点击了确定！", Toast.LENGTH_LONG).show();
                                                        Intent intent = new Intent(ChangeActivity.this, ND.class);
                                                        intent.putExtra("position", position);
-                                                       setResult(RESULT_CANCELED, intent);
+                                                       setResult(RESULT_FIRST_USER, intent);
                                                        ChangeActivity.this.finish();
                                                    }
                                                });
@@ -172,6 +164,10 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
                 normalDialog.show();
                 break;
             case R.id.change:
+                Intent intent = new Intent(this, AddActivity.class);
+                intent.putExtra("position",position);
+                startActivity(intent);
+                ChangeActivity.this.finish();
                 break;
         }
     }
