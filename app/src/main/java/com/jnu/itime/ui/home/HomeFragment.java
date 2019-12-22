@@ -22,6 +22,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.jnu.itime.AddActivity;
+import com.jnu.itime.FileDataSource;
 import com.jnu.itime.R;
 import com.jnu.itime.set_kind_1;
 import com.jnu.itime.set_kind_2;
@@ -37,6 +38,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private HomeViewModel homeViewModel;
     private ArrayList<set_kind_zhu> theset1;
     private GoodsArrayAdapter theAdaper;
+    private FileDataSource fileDataSource;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -56,10 +58,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private void InitData() {
         theset1=new  ArrayList<set_kind_zhu>();
-        Bitmap bitmap= BitmapFactory.decodeResource(getResources(), R.drawable.day, null);
+        fileDataSource=new FileDataSource(getContext());
+        theset1=fileDataSource.load();
+        /*Bitmap bitmap= BitmapFactory.decodeResource(getResources(), R.drawable.day, null);
         Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.day, null);
         theset1.add(new set_kind_zhu("只剩"+"\n"+"3天", "学习","2019年12月13日", bitmap));
-        theset1.add(new set_kind_zhu("只剩"+"\n"+"3天", "复习","2019年12月13日", bitmap1));
+        theset1.add(new set_kind_zhu("只剩"+"\n"+"3天", "复习","2019年12月13日", bitmap1));*/
     }
 
     @Override
@@ -85,6 +89,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             theset1.add(new set_kind_zhu("只剩"+"\n"+"3 天", title,day, bitmap));
             //Toast.makeText(getContext(), "233", Toast.LENGTH_SHORT).show();
             theAdaper.notifyDataSetChanged();
+            fileDataSource.save();
         }
     }
 

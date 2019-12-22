@@ -1,6 +1,9 @@
 package com.jnu.itime;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 
@@ -48,4 +51,5 @@ public class set_kind_zhu implements Serializable {
         this.three = three;
         this.pictureId = pictureId;
     }
+
 }
