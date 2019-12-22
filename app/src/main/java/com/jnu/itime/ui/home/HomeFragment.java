@@ -13,20 +13,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.jnu.itime.AddActivity;
+import com.jnu.itime.ChangeActivity;
 import com.jnu.itime.FileDataSource;
 import com.jnu.itime.R;
-import com.jnu.itime.set_kind_1;
-import com.jnu.itime.set_kind_2;
 import com.jnu.itime.set_kind_zhu;
 
 import java.io.ByteArrayOutputStream;
@@ -63,6 +60,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         theset1=new  ArrayList<set_kind_zhu>();
         fileDataSource=new FileDataSource(getContext());
         theset1=fileDataSource.load();
+        for(int j=0;j<theset1.size();j++)
+            theset1.get(j).setDay_cha();
         /*Bitmap bitmap= BitmapFactory.decodeResource(getResources(), R.drawable.day, null);
         Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.day, null);
         theset1.add(new set_kind_zhu("只剩"+"\n"+"3天", "学习","2019年12月13日", bitmap));
@@ -83,16 +82,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK)
+        if(resultCode==RESULT_OK&&requestCode==111)
         {
             String title=data.getStringExtra("title");
             String day=data.getStringExtra("day");
-            double price =data.getDoubleExtra("good_price",0);
+            String time=data.getStringExtra("time");
+            String bei=data.getStringExtra("bei");
+            int fu=data.getIntExtra("fu",0);
             Bitmap bitmap = (Bitmap) data.getParcelableExtra("picture");
-            byte[] i = new byte[0];
-            if(bitmap!=null)
-                i=bitmap2Bytes(bitmap);
-            theset1.add(new set_kind_zhu("只剩"+"\n"+"3 天", title,day, i));
+            Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.day, null);
+            if(bitmap==null)
+                bitmap=bitmap1;
+            byte[] i=bitmap2Bytes(bitmap);
+            theset1.add(new set_kind_zhu(title,day, time,i,bei,fu));
             //Toast.makeText(getContext(), "233", Toast.LENGTH_SHORT).show();
             theAdaper.notifyDataSetChanged();
             fileDataSource.save();
@@ -107,7 +109,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
+        Intent intent = new Intent(getContext(), ChangeActivity.class);
+        intent.putExtra("title",theset1.get(position).getTitle());
+        intent.putExtra("bei",theset1.get(position).getBei());
+        intent.putExtra("day",theset1.get(position).getDay());
+        intent.putExtra("time",theset1.get(position).getTime());
+        intent.putExtra("fu",theset1.get(position).getFu());
+        intent.putExtra("PictureId",theset1.get(position).getPictureId());
+        startActivityForResult(intent, 222);
     }
 
     class GoodsArrayAdapter extends ArrayAdapter<set_kind_zhu> {
@@ -131,9 +140,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
             set_kind_zhu item1 = this.getItem(position);
             img.setImageBitmap(item1.getPictureId());
-            string1.setText(item1.getOne());
-            string2.setText(item1.getTwo());
-            string3.setText(item1.getThree());
+            string1.setText(item1.getDay_cha());
+            string2.setText(item1.getTitle());
+            string3.setText(item1.getDay());
 
             return item;
         }

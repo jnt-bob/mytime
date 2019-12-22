@@ -11,8 +11,7 @@
         android:id="@+id/relativelayout"
         android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:background="@color/Allcolor"
-        >
+        android:background="@color/Allcolor">
         <ImageView
             android:id="@+id/re"
             android:layout_width="30dp"

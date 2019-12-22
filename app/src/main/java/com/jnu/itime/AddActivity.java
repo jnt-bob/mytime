@@ -135,6 +135,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     String min = String.valueOf(calendars.get(Calendar.MINUTE));
 
                     date=year+"年"+month+"月"+day;
+                    time=hour+":"+min;
                 }
                 intent.putExtra("day", date + "日");
                 intent.putExtra("time", time);
