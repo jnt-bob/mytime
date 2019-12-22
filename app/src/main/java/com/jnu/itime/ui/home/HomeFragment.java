@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -28,12 +29,13 @@ import com.jnu.itime.set_kind_1;
 import com.jnu.itime.set_kind_2;
 import com.jnu.itime.set_kind_zhu;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
-public class HomeFragment extends Fragment implements View.OnClickListener{
+public class HomeFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener{
 
     private HomeViewModel homeViewModel;
     private ArrayList<set_kind_zhu> theset1;
@@ -52,6 +54,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         theAdaper = new GoodsArrayAdapter(getContext(), R.layout.list_item_set_zhu, theset1);
         ListView listViewSuper = (ListView) root.findViewById(R.id.list_view_goods_1);
         listViewSuper.setAdapter(theAdaper);
+        listViewSuper.setOnItemClickListener(this);
         //listViewSuper.setOnItemClickListener(this);
         return root;
     }
@@ -86,11 +89,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             String day=data.getStringExtra("day");
             double price =data.getDoubleExtra("good_price",0);
             Bitmap bitmap = (Bitmap) data.getParcelableExtra("picture");
-            theset1.add(new set_kind_zhu("只剩"+"\n"+"3 天", title,day, bitmap));
+            byte[] i = new byte[0];
+            if(bitmap!=null)
+                i=bitmap2Bytes(bitmap);
+            theset1.add(new set_kind_zhu("只剩"+"\n"+"3 天", title,day, i));
             //Toast.makeText(getContext(), "233", Toast.LENGTH_SHORT).show();
             theAdaper.notifyDataSetChanged();
             fileDataSource.save();
         }
+    }
+
+    private byte[] bitmap2Bytes(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        return baos.toByteArray();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
     }
 
     class GoodsArrayAdapter extends ArrayAdapter<set_kind_zhu> {

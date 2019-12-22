@@ -5,13 +5,19 @@ import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 public class set_kind_zhu implements Serializable {
     private String One;
     private String Two;
     private String three;
-    private Bitmap pictureId;
+    private byte[] pictureId;
+
+
+    private Bitmap byte2Bitmap(byte[] data) {
+        return BitmapFactory.decodeByteArray(data, 0, data.length);
+    }
 
     public String getOne() {
         return One;
@@ -38,14 +44,14 @@ public class set_kind_zhu implements Serializable {
     }
 
     public Bitmap getPictureId() {
-        return pictureId;
+        return byte2Bitmap(pictureId);
     }
 
-    public void setPictureId(Bitmap pictureId) {
+    public void setPictureId(byte[] pictureId) {
         this.pictureId = pictureId;
     }
 
-    public set_kind_zhu(String one, String two, String three, Bitmap pictureId) {
+    public set_kind_zhu(String one, String two, String three, byte[] pictureId) {
         One = one;
         Two = two;
         this.three = three;
