@@ -3,6 +3,7 @@ package com.jnu.itime.ui.home;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,8 +56,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private void InitData() {
         theset1=new  ArrayList<set_kind_zhu>();
-        theset1.add(new set_kind_zhu("只剩"+"\n"+"3天", "学习","2019年12月13日", R.drawable.day));
-        theset1.add(new set_kind_zhu("只剩"+"\n"+"3天", "复习","2019年12月13日", R.drawable.set));
+        Bitmap bitmap= BitmapFactory.decodeResource(getResources(), R.drawable.day, null);
+        Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.day, null);
+        theset1.add(new set_kind_zhu("只剩"+"\n"+"3天", "学习","2019年12月13日", bitmap));
+        theset1.add(new set_kind_zhu("只剩"+"\n"+"3天", "复习","2019年12月13日", bitmap1));
     }
 
     @Override
@@ -79,7 +82,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             String day=data.getStringExtra("day");
             double price =data.getDoubleExtra("good_price",0);
             Bitmap bitmap = (Bitmap) data.getParcelableExtra("picture");
-            theset1.add(new set_kind_zhu("只剩"+"\n"+"3天", title,day, R.drawable.day));
+            theset1.add(new set_kind_zhu("只剩"+"\n"+"3 天", title,day, bitmap));
             //Toast.makeText(getContext(), "233", Toast.LENGTH_SHORT).show();
             theAdaper.notifyDataSetChanged();
         }
@@ -105,7 +108,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             TextView string3 = (TextView) item.findViewById(R.id.text_view_string3);
 
             set_kind_zhu item1 = this.getItem(position);
-            img.setImageResource(item1.getPictureId());
+            img.setImageBitmap(item1.getPictureId());
             string1.setText(item1.getOne());
             string2.setText(item1.getTwo());
             string3.setText(item1.getThree());

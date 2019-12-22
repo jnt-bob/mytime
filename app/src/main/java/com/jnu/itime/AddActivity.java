@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import static androidx.core.os.LocaleListCompat.create;
 
@@ -48,8 +50,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private GoodsArrayAdapter2 theAdaper2;
     private ImageView re;
     private ImageView finish;
-    private String date;
-    private String time;
+    private String date="";
+    private String time="";
     private AlertDialog alertDialog1;
 
     private View alertDialogView;
@@ -58,7 +60,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private EditText edit_bei;
     private Bitmap mBitmap;
     private final String[] items = {"每周", "每月", "每年", "自定义"};
-    private int time_fu=0;
+    private int time_fu = 0;
 
     private int i = 0;
 
@@ -111,16 +113,42 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 startActivity(intent1);
                 break;
             case R.id.finish:
+                if(edit_title.getText().toString().isEmpty())
+                    Toast.makeText(AddActivity.this, "标题不能为空", Toast.LENGTH_SHORT).show();
+                else
+                {
                 Intent intent = new Intent(this, ND.class);
                 intent.putExtra("title", edit_title.getText().toString().trim());
                 intent.putExtra("bei", edit_bei.getText().toString().trim());
-                intent.putExtra("day", date+"日");
-                intent.putExtra("time",time);
+                if(date.isEmpty())
+                {
+                    Calendar  calendars = Calendar.getInstance();
+                    calendars.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
+                    String year = String.valueOf(calendars.get(Calendar.YEAR));
+
+                    String month = String.valueOf(calendars.get(Calendar.MONTH));
+
+                    String day = String.valueOf(calendars.get(Calendar.DATE));
+
+                    String hour = String.valueOf(calendars.get(Calendar.HOUR));
+
+                    String min = String.valueOf(calendars.get(Calendar.MINUTE));
+
+                    date=year+"年"+month+"月"+day;
+                }
+                intent.putExtra("day", date + "日");
+                intent.putExtra("time", time);
                 intent.putExtra("fu", time_fu);
-                intent.putExtra("picture", mBitmap);
+                Bitmap bitmap;
+                if (mBitmap != null)
+                    bitmap = imageScale(mBitmap, 20, 20);
+                else
+                    bitmap = mBitmap;
+                intent.putExtra("picture", bitmap);
                 setResult(RESULT_OK, intent);
                 AddActivity.this.finish();
-                break;
+            }
+            break;
             case R.id.textView1:
                 if (i == 0) {
                     view.setBackgroundResource(R.drawable.mark_beselected);
@@ -134,6 +162,18 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 break;
         }
     }
+
+    public static Bitmap imageScale(Bitmap bitmap, int dst_w, int dst_h) {
+        int src_w = bitmap.getWidth();
+        int src_h = bitmap.getHeight();
+        float scale_w = ((float) dst_w) / src_w;
+        float scale_h = ((float) dst_h) / src_h;
+        Matrix matrix = new Matrix();
+        matrix.postScale(scale_w, scale_h);
+        Bitmap dstbmp = Bitmap.createBitmap(bitmap, 0, 0, src_w, src_h, matrix, true);
+        return dstbmp;
+    }
+
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -156,7 +196,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             //Toast.makeText(AddActivity.this, items[i], Toast.LENGTH_SHORT).show();
-                            time_fu=i;
+                            time_fu = i;
                             set_kind_1 times = theset1.get(1);
                             if (i != 3) {
                                 times.setTwo(items[i]);
