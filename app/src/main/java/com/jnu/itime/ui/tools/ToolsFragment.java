@@ -1,6 +1,7 @@
 package com.jnu.itime.ui.tools;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -18,9 +21,12 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.jnu.itime.AddActivity;
+import com.jnu.itime.ND;
 import com.jnu.itime.R;
+import com.jnu.itime.ui.home.HomeFragment;
 
-public class ToolsFragment extends Fragment implements View.OnClickListener{
+public class ToolsFragment extends Fragment {
 
     private ToolsViewModel toolsViewModel;
 
@@ -29,17 +35,10 @@ public class ToolsFragment extends Fragment implements View.OnClickListener{
         toolsViewModel =
                 ViewModelProviders.of(this).get(ToolsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_tools, container, false);
-        Button button=root.findViewById(R.id.bottom);
-        button.setOnClickListener(this);
-        return root;
-    }
-
-    @Override
-    public void onClick(View view) {
         ColorPickerDialogBuilder
                 .with(getContext())
                 .setTitle("Choose color")
-                .initialColor(0)
+                .initialColor(255)
                 .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                 .density(12)
                 .setOnColorSelectedListener(new OnColorSelectedListener() {
@@ -52,6 +51,7 @@ public class ToolsFragment extends Fragment implements View.OnClickListener{
                     @Override
                     public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
                         //changeBackgroundColor(selectedColor);
+
                     }
                 })
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -61,5 +61,7 @@ public class ToolsFragment extends Fragment implements View.OnClickListener{
                 })
                 .build()
                 .show();
+        return root;
     }
+
 }
