@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,8 @@ import com.jnu.itime.ChangeActivity;
 import com.jnu.itime.FileDataSource;
 import com.jnu.itime.R;
 import com.jnu.itime.set_kind_zhu;
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageListener;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -42,6 +46,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     private GoodsArrayAdapter theAdaper;
     private FileDataSource fileDataSource;
 
+    private CarouselView carouselView;
+
+    ArrayList<Bitmap> sampleImages=new ArrayList<Bitmap>();
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
@@ -56,15 +64,34 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         listViewSuper.setAdapter(theAdaper);
         listViewSuper.setOnItemClickListener(this);
         //listViewSuper.setOnItemClickListener(this);
+
+        carouselView = (CarouselView) root.findViewById(R.id.carouselView);
+        carouselView.setPageCount(sampleImages.size());
+
+        carouselView.setImageListener(imageListener);
+
         return root;
     }
+
+    ImageListener imageListener = new ImageListener() {
+        @Override
+        public void setImageForPosition(int position, ImageView imageView) {
+            imageView.setImageBitmap(sampleImages.get(position));
+        }
+    };
 
     private void InitData() {
         theset1=new  ArrayList<set_kind_zhu>();
         fileDataSource=new FileDataSource(getContext());
         theset1=fileDataSource.load();
-        for(int j=0;j<theset1.size();j++)
+        for(int j=0;j<theset1.size();j++) {
             theset1.get(j).setDay_cha();
+            sampleImages.add(theset1.get(j).getPictureId());
+        }
+        if(sampleImages.size()==0) {
+            Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.background, null);
+            sampleImages.add(bitmap1);
+        }
         /*Bitmap bitmap= BitmapFactory.decodeResource(getResources(), R.drawable.day, null);
         Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.day, null);
         theset1.add(new set_kind_zhu("只剩"+"\n"+"3天", "学习","2019年12月13日", bitmap));

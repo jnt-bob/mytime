@@ -24,6 +24,7 @@ android {
 }
 
 dependencies {
+    compile 'com.synnapps:carouselview:0.1.5'
     implementation 'com.github.QuadFlask:colorpicker:0.0.15'
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
     implementation 'com.github.donkingliang:LabelsView:1.6.1'

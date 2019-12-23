@@ -4,11 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.synnapps.carouselview.CarouselView
+        android:id="@+id/carouselView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:fillColor="#FFFFFFFF"
+        app:pageColor="#00000000"
+        app:radius="6dp"
+        app:slideInterval="3000"
+        app:strokeColor="#FF777777"
+        app:strokeWidth="1dp"/>
+
     <ListView
         android:id="@+id/list_view_goods_1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="120dp"/>
+        android:layout_below="@+id/carouselView" />
     <ImageView
         android:id="@+id/add"
         android:layout_width="50dp"
