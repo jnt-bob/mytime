@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -68,6 +69,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private int i = 0;
     private int position=-1;
 
+    static public int color=-6074;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +86,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
         re.setOnClickListener(this);
         finish.setOnClickListener(this);
+        relativeLayout.setBackground(new ColorDrawable(color));
 
 
         InitData();
