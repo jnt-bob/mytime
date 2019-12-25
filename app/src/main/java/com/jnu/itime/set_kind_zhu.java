@@ -56,7 +56,7 @@ public class set_kind_zhu implements Serializable {
         return day_cha;
     }
 
-    public void setDay_cha() {
+    public boolean setDay_cha() {
         ArrayList<Integer> day_z=zhuan(day);
         ArrayList<Integer> time_z=zhuan(time);
         Calendar cal=Calendar.getInstance();
@@ -80,12 +80,18 @@ public class set_kind_zhu implements Serializable {
         }
         String dates = String.valueOf(cal.get(Calendar.DATE));
         int x = Integer.parseInt( dates );
-        if(x==day_z.get(2))
-            day_cha ="今天";
-        else if(day_z.get(2)>x)
-        day_cha ="只剩"+"\n"+(day_z.get(2)-x)+"  天";
-        else if(day_z.get(2)<x)
-            day_cha ="过了"+"\n"+(x-day_z.get(2))+"  天";
+        if(x==day_z.get(2)) {
+            day_cha = "今天";
+            return true;
+        }
+        else if(day_z.get(2)>x) {
+            day_cha = "只剩" + "\n" + (day_z.get(2) - x) + "  天";
+            return true;
+        }
+        else{
+            day_cha = "过了" + "\n" + (x - day_z.get(2)) + "  天";
+            return false;
+        }
     }
 
     public String getTitle() {

@@ -39,7 +39,7 @@ import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ChangeActivity extends AppCompatActivity implements View.OnClickListener{
+public class ChangeActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ArrayList<switch_button> theset2;
     private GoodsArrayAdapter2 theAdaper2;
@@ -52,76 +52,77 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
     private RelativeLayout relativeLayout;
     private int position;
 
-    private long dayss=0;
-    private long hours=0;
-    private long min=0;
-    private long secord=0;
+    private long dayss = 0;
+    private long hours = 0;
+    private long min = 0;
+    private long secord = 0;
 
 
     private int i = 0;
     private Timer timer = null;
     private TimerTask task = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_change);
 
-        titles=findViewById(R.id.title);
-        days=findViewById(R.id.day);
-        dao=findViewById(R.id.dao);
-        relativeLayout=findViewById(R.id.relativelayout);
+        titles = findViewById(R.id.title);
+        days = findViewById(R.id.day);
+        dao = findViewById(R.id.dao);
+        relativeLayout = findViewById(R.id.relativelayout);
 
-        position=getIntent().getIntExtra("position",0);
-        String title= HomeFragment.theset1.get(position).getTitle();
-        String bei= getIntent().getStringExtra("bei");
-        String day= HomeFragment.theset1.get(position).getDay();
-        String time= HomeFragment.theset1.get(position).getTime();
-        int fu= HomeFragment.theset1.get(position).getFu();
+        position = getIntent().getIntExtra("position", 0);
+        String title = HomeFragment.theset1.get(position).getTitle();
+        String bei = getIntent().getStringExtra("bei");
+        String day = HomeFragment.theset1.get(position).getDay();
+        String time = HomeFragment.theset1.get(position).getTime();
+        int fu = HomeFragment.theset1.get(position).getFu();
         //Bitmap bitmap = (Bitmap) getIntent().getParcelableExtra("PictureId");
 
         titles.setText(title);
-        days.setText(day+" "+time);
-        Bitmap bitmap= HomeFragment.theset1.get(position).getPictureId();
+        days.setText(day + " " + time);
+        Bitmap bitmap = HomeFragment.theset1.get(position).getPictureId();
         Drawable drawable = new BitmapDrawable(getResources(), bitmap);
         relativeLayout.setBackground(drawable);
 
-        ArrayList<Integer> day_z=zhuan(day);
-        ArrayList<Integer> time_z=zhuan(time);
-        Calendar cal=Calendar.getInstance();
+        ArrayList<Integer> day_z = zhuan(day);
+        ArrayList<Integer> time_z = zhuan(time);
+        Calendar cal = Calendar.getInstance();
         cal.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
-        Date date=cal.getTime();
+        Date date = cal.getTime();
 
 
         SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         Date toDate1 = null;
         try {
             //toDate1 = simpleFormat.parse("2018-03-12 12:00");
-            toDate1 = simpleFormat.parse(day_z.get(0)+"-"+day_z.get(1)+"-"+day_z.get(2)+" "+time_z.get(0)+":"+time_z.get(1));
+            toDate1 = simpleFormat.parse(day_z.get(0) + "-" + day_z.get(1) + "-" + day_z.get(2) + " " + time_z.get(0) + ":" + time_z.get(1));
             long from1 = date.getTime();
             long to1 = toDate1.getTime();
-            if(to1>from1) {
+            if (to1 > from1) {
                 dayss = ((to1 - from1) / (1000 * 60 * 60 * 24));
-                hours =  ((to1 - from1 - dayss * (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                min =  ((to1 - from1 - dayss * (1000 * 60 * 60 * 24) - hours * (1000 * 60 * 60)) / (1000 * 60));
+                hours = ((to1 - from1 - dayss * (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                min = ((to1 - from1 - dayss * (1000 * 60 * 60 * 24) - hours * (1000 * 60 * 60)) / (1000 * 60));
                 secord = ((to1 - from1 - dayss * (1000 * 60 * 60 * 24) - hours * (1000 * 60 * 60) - min * (1000 * 60)) / (1000));
-            }
-            else
-            {
-                dayss =  ((from1-to1) / (1000 * 60 * 60 * 24));
-                hours =  ((from1-to1 - dayss * (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                min = ((from1-to1 - dayss * (1000 * 60 * 60 * 24) - hours * (1000 * 60 * 60)) / (1000 * 60));
-                secord =  ((from1-to1 - dayss * (1000 * 60 * 60 * 24) - hours * (1000 * 60 * 60) - min * (1000 * 60)) / (1000));
+            } else {
+                dayss = ((from1 - to1) / (1000 * 60 * 60 * 24));
+                hours = ((from1 - to1 - dayss * (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                min = ((from1 - to1 - dayss * (1000 * 60 * 60 * 24) - hours * (1000 * 60 * 60)) / (1000 * 60));
+                secord = ((from1 - to1 - dayss * (1000 * 60 * 60 * 24) - hours * (1000 * 60 * 60) - min * (1000 * 60)) / (1000));
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        if (HomeFragment.theset1.get(position).setDay_cha())
+            dao.setText("还剩" + dayss + "天 " + hours + "小时 " + min + "分钟 " + secord + "秒");
+        else
+            dao.setText("过了" + dayss + "天 " + hours + "小时 " + min + "分钟 " + secord + "秒");
 
-        dao.setText(dayss+"天 "+hours+"小时 "+min+"分钟 "+secord+"秒");
-
-        re=findViewById(R.id.re);
-        delect=findViewById(R.id.delect);
-        change=findViewById(R.id.change);
+        re = findViewById(R.id.re);
+        delect = findViewById(R.id.delect);
+        change = findViewById(R.id.change);
 
         re.setOnClickListener(this);
         delect.setOnClickListener(this);
@@ -141,8 +142,7 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        switch (view.getId())
-        {
+        switch (view.getId()) {
             case R.id.re:
                 Intent intent1 = new Intent(this, ND.class);
                 ChangeActivity.this.finish();
@@ -176,16 +176,15 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.change:
                 Intent intent = new Intent(this, AddActivity.class);
-                intent.putExtra("position",position);
+                intent.putExtra("position", position);
                 startActivity(intent);
                 ChangeActivity.this.finish();
                 break;
         }
     }
 
-    public ArrayList<Integer> zhuan(String date)
-    {
-        ArrayList<Integer> re=new ArrayList<Integer>();
+    public ArrayList<Integer> zhuan(String date) {
+        ArrayList<Integer> re = new ArrayList<Integer>();
         date = date.trim();
         String str2 = "";
         if (date != null && !"".equals(date)) {
@@ -193,21 +192,17 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
                 {
                     if (date.charAt(i) >= 48 && date.charAt(i) <= 57) {
                         str2 += date.charAt(i);
-                    }
-                    else
-                    {
-                        if(!str2.isEmpty())
-                        {
-                            int w=Integer.parseInt( str2 );
+                    } else {
+                        if (!str2.isEmpty()) {
+                            int w = Integer.parseInt(str2);
                             re.add(w);
-                            str2="";
+                            str2 = "";
                         }
                     }
                 }
             }
-            if(!str2.isEmpty())
-            {
-                int w=Integer.parseInt( str2 );
+            if (!str2.isEmpty()) {
+                int w = Integer.parseInt(str2);
                 re.add(w);
             }
         }
@@ -217,9 +212,14 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             //time.setText(msg.arg1 + "");
-            dao.setText(dayss+"天 "+hours+"小时 "+min+"分钟 "+secord+"秒");
+            if (HomeFragment.theset1.get(position).setDay_cha())
+                dao.setText("还剩" + dayss + "天 " + hours + "小时 " + min + "分钟 " + secord + "秒");
+            else
+                dao.setText("过了" + dayss + "天 " + hours + "小时 " + min + "分钟 " + secord + "秒");
             startTime();
-        };
+        }
+
+        ;
     };
 
     public void startTime() {
@@ -228,20 +228,35 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void run() {
-                if (dayss>0||hours>0||min>0||secord>0) {   //加入判断不能小于0
-                    secord--;
-                    if(secord==-1)
+                if (dayss > 0 || hours > 0 || min > 0 || secord > 0) {   //加入判断不能小于0
+                    if(HomeFragment.theset1.get(position).setDay_cha()) {
+                        secord--;
+                        if (secord == -1) {
+                            min--;
+                            secord = 59;
+                            if (min == -1) {
+                                hours--;
+                                min = 59;
+                                if (hours == -1) {
+                                    dayss--;
+                                    hours = 23;
+                                }
+                            }
+                        }
+                    }
+                    else
                     {
-                        min--;
-                        secord=59;
-                        if(min==-1)
-                        {
-                            hours--;
-                            min=59;
-                            if(hours==-1)
-                            {
-                                dayss--;
-                                hours=23;
+                        secord++;
+                        if (secord == 60) {
+                            min++;
+                            secord = 0;
+                            if (min == 60) {
+                                hours++;
+                                min = 0;
+                                if (hours == 60) {
+                                    dayss++;
+                                    hours = 0;
+                                }
                             }
                         }
                     }
@@ -253,10 +268,9 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
         timer.schedule(task, 1000);
     }
 
-    public void stopTime(){
+    public void stopTime() {
         timer.cancel();
     }
-
 
 
     class GoodsArrayAdapter2 extends ArrayAdapter<switch_button> {
