@@ -162,6 +162,7 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
                                                        Intent intent = new Intent(ChangeActivity.this, ND.class);
                                                        intent.putExtra("position", position);
                                                        setResult(RESULT_FIRST_USER, intent);
+                                                       stopTime();
                                                        ChangeActivity.this.finish();
                                                    }
                                                });

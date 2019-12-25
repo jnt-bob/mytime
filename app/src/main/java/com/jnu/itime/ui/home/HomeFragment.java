@@ -113,31 +113,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK&&requestCode==111)
         {
-            /*String title=data.getStringExtra("title");
-            String day=data.getStringExtra("day");
-            String time=data.getStringExtra("time");
-            String bei=data.getStringExtra("bei");
-            int fu=data.getIntExtra("fu",0);
-            //Bitmap bitmap = (Bitmap) data.getParcelableExtra("picture");
-            byte[] w=data.getByteArrayExtra("picture");
-            /*Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.day, null);
-            if(bitmap==null)
-                bitmap=bitmap1;
-            byte[] i=bitmap2Bytes(bitmap);*/
-            //theset1.add(new set_kind_zhu(title,day, time,w,bei,fu));
-            //Toast.makeText(getContext(), "233", Toast.LENGTH_SHORT).show();
             theAdaper.notifyDataSetChanged();
             fileDataSource.save();
             sampleImages.clear();
             for(int j=0;j<theset1.size();j++) {
                 sampleImages.add(theset1.get(j).getPictureId());
             }
-            carouselView.setPageCount(sampleImages.size());
-            carouselView.setImageListener(imageListener);
             if(sampleImages.size()==0) {
                 Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.background, null);
                 sampleImages.add(bitmap1);
             }
+            carouselView.setPageCount(sampleImages.size());
+            carouselView.setImageListener(imageListener);
         }
         else if(resultCode==RESULT_FIRST_USER&&requestCode==222)
         {
@@ -149,12 +136,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
             for(int j=0;j<theset1.size();j++) {
                 sampleImages.add(theset1.get(j).getPictureId());
             }
-            carouselView.setPageCount(sampleImages.size());
-            carouselView.setImageListener(imageListener);
             if(sampleImages.size()==0) {
                 Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.background, null);
                 sampleImages.add(bitmap1);
             }
+            carouselView.setPageCount(sampleImages.size());
+            carouselView.setImageListener(imageListener);
         }
         else if(resultCode==RESULT_CANCELED&&requestCode==222)
         {
@@ -164,20 +151,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
             for(int j=0;j<theset1.size();j++) {
                 sampleImages.add(theset1.get(j).getPictureId());
             }
-            carouselView.setPageCount(sampleImages.size());
-            carouselView.setImageListener(imageListener);
             if(sampleImages.size()==0) {
                 Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.background, null);
                 sampleImages.add(bitmap1);
             }
+            carouselView.setPageCount(sampleImages.size());
+            carouselView.setImageListener(imageListener);
         }
     }
 
-    private byte[] bitmap2Bytes(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        return baos.toByteArray();
-    }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {

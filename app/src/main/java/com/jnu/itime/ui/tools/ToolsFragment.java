@@ -83,9 +83,5 @@ public class ToolsFragment extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         Toast.makeText(getContext(), "修改成功", Toast.LENGTH_SHORT).show();
         AddActivity.color=colorPickerView.getSelectedColor();
-        //button.setTextColor(colorPickerView.getSelectedColor());
-        /*appBarLayout.setBackgroundColor(colorPickerView.getSelectedColor());
-        toolbar.setBackground(new ColorDrawable(colorPickerView.getSelectedColor()));
-        appBarLayout.setBackground(new ColorDrawable(colorPickerView.getSelectedColor()));*/
     }
 }
