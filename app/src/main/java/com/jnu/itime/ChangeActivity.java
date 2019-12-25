@@ -211,7 +211,6 @@ public class ChangeActivity extends AppCompatActivity implements View.OnClickLis
 
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
-            //time.setText(msg.arg1 + "");
             if (HomeFragment.theset1.get(position).setDay_cha())
                 dao.setText("还剩" + dayss + "天 " + hours + "小时 " + min + "分钟 " + secord + "秒");
             else

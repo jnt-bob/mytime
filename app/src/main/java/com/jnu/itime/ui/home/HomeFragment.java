@@ -134,6 +134,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
             }
             carouselView.setPageCount(sampleImages.size());
             carouselView.setImageListener(imageListener);
+            if(sampleImages.size()==0) {
+                Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.background, null);
+                sampleImages.add(bitmap1);
+            }
         }
         else if(resultCode==RESULT_FIRST_USER&&requestCode==222)
         {
@@ -147,6 +151,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
             }
             carouselView.setPageCount(sampleImages.size());
             carouselView.setImageListener(imageListener);
+            if(sampleImages.size()==0) {
+                Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.background, null);
+                sampleImages.add(bitmap1);
+            }
         }
         else if(resultCode==RESULT_CANCELED&&requestCode==222)
         {
@@ -158,6 +166,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
             }
             carouselView.setPageCount(sampleImages.size());
             carouselView.setImageListener(imageListener);
+            if(sampleImages.size()==0) {
+                Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.background, null);
+                sampleImages.add(bitmap1);
+            }
         }
     }
 
