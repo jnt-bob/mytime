@@ -67,7 +67,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
         carouselView = (CarouselView) root.findViewById(R.id.carouselView);
         carouselView.setPageCount(sampleImages.size());
-
         carouselView.setImageListener(imageListener);
 
         return root;
@@ -129,6 +128,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
             //Toast.makeText(getContext(), "233", Toast.LENGTH_SHORT).show();
             theAdaper.notifyDataSetChanged();
             fileDataSource.save();
+            sampleImages.clear();
+            for(int j=0;j<theset1.size();j++) {
+                sampleImages.add(theset1.get(j).getPictureId());
+            }
+            carouselView.setPageCount(sampleImages.size());
+            carouselView.setImageListener(imageListener);
         }
         else if(resultCode==RESULT_FIRST_USER&&requestCode==222)
         {
@@ -136,11 +141,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
             theset1.remove(position);
             theAdaper.notifyDataSetChanged();
             fileDataSource.save();
+            sampleImages.clear();
+            for(int j=0;j<theset1.size();j++) {
+                sampleImages.add(theset1.get(j).getPictureId());
+            }
+            carouselView.setPageCount(sampleImages.size());
+            carouselView.setImageListener(imageListener);
         }
         else if(resultCode==RESULT_CANCELED&&requestCode==222)
         {
             theAdaper.notifyDataSetChanged();
             fileDataSource.save();
+            sampleImages.clear();
+            for(int j=0;j<theset1.size();j++) {
+                sampleImages.add(theset1.get(j).getPictureId());
+            }
+            carouselView.setPageCount(sampleImages.size());
+            carouselView.setImageListener(imageListener);
         }
     }
 
